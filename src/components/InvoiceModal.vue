@@ -64,11 +64,8 @@
           </div>
         </div>
         <div class="input flex flex-column">
-          <label for="paymentTerms">Payment Terms</label>
-          <select required type="text" id="paymentTerms" v-model="paymentTerms">
-            <option value="30">Net 30 Days</option>
-            <option value="60">Net 60 Days</option>
-          </select>
+          <label for="paymentTerms">Payment Terms (In Days)</label>
+          <input required type="number" id="paymentTerms" v-model="paymentTerms"/>
         </div>
         <div class="input flex flex-column">
           <label for="productDescription">Product Description</label>
@@ -111,10 +108,12 @@
 </template>
 
 <script>
+import {uid} from 'uid';
 export default {
   name: 'invoiceModal',
   data() {
     return {
+      dateOptions: {year: "numeric", month: "short", day: "numeric" },
       billerStreetAddress: null,
       billerCity: null,
       billerZipCode: null,
@@ -127,7 +126,7 @@ export default {
       clientCountry: null,
       invoiceDateUnix: null,
       invoiceDate: null,
-      paymentTerms: null,
+      paymentTerms: 1,
       paymentDueDateUnix: null,
       paymentDueDate: null,
       productDescription: null,
@@ -138,11 +137,31 @@ export default {
     }
   },
   created() {
-    
+    this.invoiceDateUnix = Date.now();
+    this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions);
   },
   methods: {
     closeInvoice() {
       this.$store.commit('toggleInvoice');
+    },
+    addNewInvoiceItem() {
+      this.invoiceItemList.push({
+        id: uid(),
+        itemName: "",
+        qty: "",
+        price: 0,
+        total: 0
+      })
+    },
+    deleteInvoiceItem(id) {
+      this.invoiceItemList = this.invoiceItemList.filter(item => item.id !== id)
+    }
+  },
+  watch: {
+    paymentTerms() {
+      const futureDate = new Date();
+      this.paymentDueDateUnix = futureDate.setDate(futureDate.getDate() + parseInt(this.paymentTerms));
+      this.paymentDueDate = new Date(this.paymentDueDateUnix).toLocaleDateString('en-us', this.dateOptions);
     }
   }
 }
@@ -207,6 +226,9 @@ export default {
         gap: 24px;
         div {
           flex: 1
+        }
+        #paymentTerms {
+          padding-right: 20px;
         }
       }
 
@@ -297,7 +319,7 @@ export default {
     background-color: #1e2139;
     color: #fff;
     border-radius: 4px;
-    padding: 12px 4px;
+    padding: 12px 8px;
     border: none;
 
     &:focus {
