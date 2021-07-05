@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     newInvoice() {
-
+      this.$store.commit('toggleInvoice');
     },
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu
