@@ -1,6 +1,7 @@
 <template>
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
+      <loading v-show="loading == true"/>
       <h1>New Invoice</h1>
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
@@ -108,11 +109,14 @@
 </template>
 
 <script>
+import db from '../firebase/firebaseinit';
+import loading from '@/components/Loading';
 import {uid} from 'uid';
 export default {
   name: 'invoiceModal',
   data() {
     return {
+      loading: false,
       dateOptions: {year: "numeric", month: "short", day: "numeric" },
       billerStreetAddress: null,
       billerCity: null,
@@ -126,7 +130,7 @@ export default {
       clientCountry: null,
       invoiceDateUnix: null,
       invoiceDate: null,
-      paymentTerms: 1,
+      paymentTerms: 0,
       paymentDueDateUnix: null,
       paymentDueDate: null,
       productDescription: null,
@@ -135,6 +139,9 @@ export default {
       invoiceItemList: [],
       invoiceTotal: 0,
     }
+  },
+  components: {
+    loading
   },
   created() {
     this.invoiceDateUnix = Date.now();
@@ -155,7 +162,57 @@ export default {
     },
     deleteInvoiceItem(id) {
       this.invoiceItemList = this.invoiceItemList.filter(item => item.id !== id)
-    }
+    },
+    calInvoiceTotal() {
+      this.invoiceTotal = 0;
+      this.invoiceItemList.forEach(item => {
+        this.invoiceTotal += item.total;
+      });
+    },
+    publishInvoice() {
+      this.invoicePending = true;
+    },
+    saveDraft() {
+      this.invoiceDraft = true;
+    },
+    async uploadInvoice() {
+      if (this.invoiceItemList.length <= 0) {
+        alert("Please fill out work Items");
+        return;
+      }
+      this.loading = true;
+      this.calInvoiceTotal();
+      const databseRef = db.collection('invoices').doc();
+      await databseRef.set({
+        invoiceId: uid(6),
+        billerStreetAddress: this.billerStreetAddress,
+        billerCity: this.billerCity,
+        billerZipCode: this.billerZipCode,
+        billerCountry: this.billerCountry,
+        clientName: this.clientName,
+        clientEmail: this.clientEmail,
+        clientStreetAddress: this.clientStreetAddress,
+        clientCity: this.clientCity,
+        clientZipCode: this.clientZipCode,
+        clientCountry: this.clientCountry,
+        invoiceDate: this.invoiceDate,
+        invoiceDateUnix: this.invoiceDateUnix,
+        paymentTerms: this.paymentTerms,
+        paymentDueDate: this.paymentDueDate,
+        paymentDueDateUnix: this.paymentDueDateUnix,
+        productDescription: this.productDescription,
+        invoiceItemList: this.invoiceItemList,
+        invoiceTotal: this.invoiceTotal,
+        invoicePending: this.invoicePending,
+        invoiceDraft: this.invoiceDraft,
+        invoicePaid: null,
+      });
+      this.loading = false;
+      this.$store.commit('toggleInvoice');
+    },
+    submitForm() {
+      this.uploadInvoice();
+    },
   },
   watch: {
     paymentTerms() {
