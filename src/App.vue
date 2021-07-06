@@ -1,10 +1,11 @@
 <template>
 <div>
   <div v-if="!mobile" class="app flex flex-column">
-    <navigation />
+    <Navigation />
     <div class="app-content flex flex-column">
+      <Modal v-if="modalActive"/>
       <transition name="invoice">
-        <invoiceModal v-if="invoiceModal" />
+        <InvoiceModal v-if="invoiceModal" />
       </transition>
       <router-view />
     </div>
@@ -17,8 +18,9 @@
 </template>
 
 <script>
-import navigation from './components/Navigation.vue'
-import invoiceModal from './components/InvoiceModal.vue'
+import Navigation from './components/Navigation.vue'
+import InvoiceModal from './components/InvoiceModal.vue'
+import Modal from './components/Modal.vue'
 export default {
   data() {
     return {
@@ -26,8 +28,9 @@ export default {
     }
   },
   components: {
-    navigation,
-    invoiceModal
+    Navigation,
+    InvoiceModal,
+    Modal
   },
   created() {
     this.checkScreen();
@@ -47,6 +50,9 @@ export default {
   computed: {
     invoiceModal() {
       return this.$store.state.invoiceModal;
+    },
+    modalActive() {
+      return this.$store.state.modalActive;
     }
   }
 }

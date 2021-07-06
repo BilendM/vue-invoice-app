@@ -1,7 +1,7 @@
 <template>
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
-      <loading v-show="loading == true"/>
+      <Loading v-show="loading == true"/>
       <h1>New Invoice</h1>
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
@@ -97,11 +97,11 @@
       </div>
       <div class="save flex">
         <div class="left">
-          <button @click="closeInvoice" class="red">Cancel</button>
+          <button type="button" @click="closeInvoice" class="red">Cancel</button>
         </div>
         <div class="right flex">
-          <button @click="saveDraft" class="dark-purple">Save Draft</button>
-          <button @click="publishInvoice" class="purple">Create Invoice</button>
+          <button type="submit" @click="saveDraft" class="dark-purple">Save Draft</button>
+          <button type="submit" @click="publishInvoice" class="purple">Create Invoice</button>
         </div>
       </div>
     </form>
@@ -110,7 +110,7 @@
 
 <script>
 import db from '../firebase/firebaseinit';
-import loading from '@/components/Loading';
+import Loading from '@/components/Loading';
 import {uid} from 'uid';
 export default {
   name: 'invoiceModal',
@@ -141,13 +141,18 @@ export default {
     }
   },
   components: {
-    loading
+    Loading
   },
   created() {
     this.invoiceDateUnix = Date.now();
     this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions);
   },
   methods: {
+    checkClick(e) {
+      if (e.target === this.$refs.invoiceWrap) {
+        this.$store.commit('toggleModal');
+      }
+    },
     closeInvoice() {
       this.$store.commit('toggleInvoice');
     },
