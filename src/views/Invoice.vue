@@ -16,7 +16,7 @@
         <button @click="toggleEditInvoice" class="dark-purple">Edit</button>
         <button @click="deleteInvoice(currentInvoice.docId)" class="red">Delete</button>
         <button @click="updateStatusToPaid(currentInvoice.docId)" v-if="currentInvoice.invoicePending" class="green">Mark as Paid</button>
-        <button @click="updateStatusToPending" v-if="currentInvoice.invoiceDraft || currentInvoice.invoicePaid" class="orange">Mark as Pending</button>
+        <button @click="updateStatusToPending(currentInvoice.docId)" v-if="currentInvoice.invoiceDraft || currentInvoice.invoicePaid" class="orange">Mark as Pending</button>
       </div>
     </div>
     <div class="invoice-details flex flex-column">
@@ -99,6 +99,12 @@ export default {
     async deleteInvoice(docId) {
       await this.$store.dispatch('deleteInvoice', docId);
       this.$router.push({name: 'Home'});
+    },
+    updateStatusToPaid(docId) {
+      this.$store.dispatch('updateStatusToPaid', docId)
+    },
+    updateStatusToPending(docId) {
+      this.$store.dispatch('updateStatusToPending', docId)
     }
   },
   computed: {

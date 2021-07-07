@@ -43,7 +43,7 @@ export default {
   components: {Invoice},
   data() {
     return {
-      filterMenu: null
+      filterMenu: null,
     }
   },
   methods: {
