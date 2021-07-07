@@ -249,11 +249,15 @@ export default {
 
       .bottom {
         margin-top: 50px;
+        box-shadow: 0px 14px 18px 6px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        border-radius: 20px 20px 20px 20px;
 
         .billing-items {
           padding: 32px;
           border-radius: 20px 20px 0 0;
           background-color: #252945;
+          
 
           .heading {
             color: #dfe3fa;
