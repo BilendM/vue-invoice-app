@@ -37,6 +37,12 @@ export default {
     padding: 28px 32px;
     background-color: #1e2139;
     align-items: center;
+    box-shadow: none;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
 
     span {
       font-size: 13px;

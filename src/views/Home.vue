@@ -4,7 +4,7 @@
     <div class="header flex">
       <div class="left flex flex-column">
         <h1>Invoices</h1>
-        <span>There are 4 total invoices</span>
+        <span>There are {{invoices.length}} total invoices</span>
       </div>
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
