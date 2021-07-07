@@ -97,7 +97,8 @@ export default {
       this.$store.commit('toggleInvoice');
     },
     async deleteInvoice(docId) {
-      await this.$store.dispatch('deleteInvoice', docId)
+      await this.$store.dispatch('deleteInvoice', docId);
+      this.$router.push({name: 'Home'});
     }
   },
   computed: {

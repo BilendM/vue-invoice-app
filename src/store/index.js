@@ -78,7 +78,7 @@ export default createStore({
       commit('editInvoice');
       commit('setCurrentInvoice', routeId);
     },
-    async deleteInvoice({commit, docId}) {
+    async deleteInvoice({commit}, docId) {
       const getInvoice = db.collection('invoices').doc(docId);
       await getInvoice.delete();
       commit('deleteInvoice', docId)
