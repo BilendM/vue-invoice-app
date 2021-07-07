@@ -7,7 +7,8 @@ export default createStore({
     invoiceModal: false,
     modalActive: false,
     invoicesLoaded: false,
-    currentInvoice: null
+    currentInvoice: null,
+    editInvoice: null
   },
   mutations: {
     toggleInvoice(state) {
@@ -26,6 +27,12 @@ export default createStore({
       state.currentInvoice = state.invoiceData.filter(invoice => {
         return invoice.invoiceId === payload
       });
+    },
+    editInvoice(state) {
+      state.editInvoice = !state.editInvoice;
+    },
+    deleteInvoice(state, payload) {
+      state.invoiceData = state.invoiceData.filter(invoice => invoice.docId !== payload)
     }
   },
   actions: {
@@ -63,6 +70,18 @@ export default createStore({
         }
       });
       commit('invoicesLoaded');
+    },
+    async updateInvoice({commit, dispatch}, {docId, routeId}) {
+      commit('deleteInvoice', docId);
+      await dispatch('getInvoices');
+      commit('toggleInvoice');
+      commit('editInvoice');
+      commit('setCurrentInvoice', routeId);
+    },
+    async deleteInvoice({commit, docId}) {
+      const getInvoice = db.collection('invoices').doc(docId);
+      await getInvoice.delete();
+      commit('deleteInvoice', docId)
     }
   },
   modules: {

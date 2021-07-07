@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="right flex">
-        <button @click="toggleEditInvoice(currentInvoice.docId)" class="dark-purple">Edit</button>
+        <button @click="toggleEditInvoice" class="dark-purple">Edit</button>
         <button @click="deleteInvoice(currentInvoice.docId)" class="red">Delete</button>
         <button @click="updateStatusToPaid(currentInvoice.docId)" v-if="currentInvoice.invoicePending" class="green">Mark as Paid</button>
         <button @click="updateStatusToPending" v-if="currentInvoice.invoiceDraft || currentInvoice.invoicePaid" class="orange">Mark as Pending</button>
@@ -91,11 +91,28 @@ export default {
     getCurrentInvoice() {
       this.$store.commit('setCurrentInvoice', this.$route.params.invoiceId);
       this.currentInvoice = this.currentInvoices[0];
+    },
+    toggleEditInvoice() {
+      this.$store.commit('editInvoice');
+      this.$store.commit('toggleInvoice');
+    },
+    async deleteInvoice(docId) {
+      await this.$store.dispatch('deleteInvoice', docId)
     }
   },
   computed: {
     currentInvoices() {
       return this.$store.state.currentInvoice;
+    },
+    editInvoice() {
+      return this.$store.state.editInvoice;
+    }
+  },
+  watch: {
+    editInvoice() {
+      if (!this.editInvoice) {
+        this.currentInvoice = this.currentInvoices[0];
+      }
     }
   }
 }

@@ -20,6 +20,14 @@ export default {
     closeInvoice() {
       this.$store.commit('toggleModal');
       this.$store.commit('toggleInvoice');
+      if (this.editInvoice) {
+        this.$store.commit('editInvoice');
+      }
+    },
+  },
+  computed: {
+    editInvoice() {
+      return this.$store.state.editInvoice;
     }
   }
 }
