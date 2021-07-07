@@ -25,13 +25,17 @@
         </div>
       </div>
     </div>
+    <div>
+      <Invoice v-for="(invoice, index) in invoices" :key="index" :invoice="invoice"/>
+    </div>
   </div>
 </template>
 
 <script>
+import Invoice from '@/components/Invoice'
 export default {
   name: "Home",
-  components: {},
+  components: {Invoice},
   data() {
     return {
       filterMenu: null
@@ -43,6 +47,11 @@ export default {
     },
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu
+    }
+  },
+  computed: {
+    invoices() {
+      return this.$store.state.invoiceData;
     }
   }
 };

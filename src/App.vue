@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="invoicesLoaded">
   <div v-if="!mobile" class="app flex flex-column">
     <Navigation />
     <div class="app-content flex flex-column">
@@ -35,8 +35,12 @@ export default {
   created() {
     this.checkScreen();
     window.addEventListener('resize', this.checkScreen);
+    this.getInvoices();
   },
   methods: {
+    getInvoices() {
+      this.$store.dispatch('getInvoices');
+    },
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
@@ -53,6 +57,9 @@ export default {
     },
     modalActive() {
       return this.$store.state.modalActive;
+    },
+    invoicesLoaded() {
+      return this.$store.state.invoicesLoaded;
     }
   }
 }
