@@ -8,13 +8,13 @@
       </div>
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
-          <span>Filter by status</span>
+          <span>Filter by status<span v-if="filteredInvoice">: {{ filteredInvoice }}</span></span>
           <img src="@/assets/icon-arrow-down.svg" alt="">
           <ul v-show="filterMenu" class="filter-menu">
-            <li>Draft</li>
-            <li>Pending</li>
-            <li>Paid</li>
-            <li>Clear Filter</li>
+            <li @click="filteredInvoices" >Draft</li>
+            <li @click="filteredInvoices" >Pending</li>
+            <li @click="filteredInvoices" >Paid</li>
+            <li @click="filteredInvoices" >Clear Filter</li>
           </ul>
         </div>
         <div @click="newInvoice" class="button flex">
@@ -26,7 +26,12 @@
       </div>
     </div>
     <div v-if="invoices.length > 0">
-      <Invoice v-for="(invoice, index) in invoices" :key="index" :invoice="invoice"/>
+      <div v-if="filteredData.length <=0">
+        <h4 class="no-filter">No Invoices with status of {{ filteredInvoice }}</h4>
+      </div>
+      <div v-else>
+        <Invoice v-for="(invoice, index) in filteredData" :key="index" :invoice="invoice"/>
+      </div>
     </div>
     <div v-else class="empty flex flex-column">
       <img src="@/assets/illustration-empty.svg" alt="">
@@ -44,6 +49,7 @@ export default {
   data() {
     return {
       filterMenu: null,
+      filteredInvoice: null
     }
   },
   methods: {
@@ -52,11 +58,32 @@ export default {
     },
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu
+    },
+    filteredInvoices(e) {
+      if (e.target.innerText === 'Clear Filter') {
+        this.filteredInvoice = null;
+        return;
+      }
+      this.filteredInvoice = e.target.innerText;
     }
   },
   computed: {
     invoices() {
       return this.$store.state.invoiceData;
+    },
+    filteredData() {
+      return this.invoices.filter(invoice => {
+        if (this.filteredInvoice === "Draft") {
+          return invoice.invoiceDraft === true;
+        }
+        if (this.filteredInvoice === "Pending") {
+          return invoice.invoicePending === true;
+        }
+        if (this.filteredInvoice === "Paid") {
+          return invoice.invoicePaid === true;
+        }
+        return invoice;
+      });
     }
   }
 };
@@ -161,6 +188,10 @@ export default {
       font-weight: 300;
       margin-top: 16px;
     }
+  }
+
+  .no-filter {
+    text-align: center;
   }
 }
 </style>
