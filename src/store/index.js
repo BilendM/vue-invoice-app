@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import db from '../firebase/firebaseinit';
+import firebase from '../firebase/firebaseinit';
 
 export default createStore({
   state: {
@@ -54,7 +54,7 @@ export default createStore({
   },
   actions: {
     async getInvoices({state, commit}) {
-      const getData = db.collection('invoices');
+      const getData = firebase.firestore().collection('invoices');
       const results = await getData.get();
       results.forEach(doc => {
         if (!state.invoiceData.some(invoice => invoice.docId === doc.id)) {
@@ -96,12 +96,12 @@ export default createStore({
       commit('setCurrentInvoice', routeId);
     },
     async deleteInvoice({commit}, docId) {
-      const getInvoice = db.collection('invoices').doc(docId);
+      const getInvoice = firebase.firestore().collection('invoices').doc(docId);
       await getInvoice.delete();
       commit('deleteInvoice', docId)
     },
     async updateStatusToPaid({commit}, docId){
-      const getInvoice = db.collection('invoices').doc(docId);
+      const getInvoice = firebase.firestore().collection('invoices').doc(docId);
       await getInvoice.update({
         invoicePaid: true,
         invoicePending: false
@@ -109,7 +109,7 @@ export default createStore({
       commit('updateStatusToPaid', docId);
     },
     async updateStatusToPending({commit}, docId){
-      const getInvoice = db.collection('invoices').doc(docId);
+      const getInvoice = firebase.firestore().collection('invoices').doc(docId);
       await getInvoice.update({
         invoicePending: true,
         invoicePaid: false,

@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import db from '../firebase/firebaseinit';
+import firebase from '../firebase/firebaseinit';
 import Loading from '@/components/Loading';
 import {uid} from 'uid';
 export default {
@@ -219,7 +219,7 @@ export default {
       }
       this.loading = true;
       this.calInvoiceTotal();
-      const databseRef = db.collection('invoices').doc();
+      const databseRef = firebase.firestore().collection('invoices').doc();
       await databseRef.set({
         invoiceId: uid(6),
         billerStreetAddress: this.billerStreetAddress,
@@ -255,7 +255,7 @@ export default {
       }
       this.loading = true;
       this.calInvoiceTotal();
-      const databseRef = db.collection('invoices').doc(this.docId);
+      const databseRef = firebase.firestroe().collection('invoices').doc(this.docId);
       await databseRef.update({
         billerStreetAddress: this.billerStreetAddress,
         billerCity: this.billerCity,
