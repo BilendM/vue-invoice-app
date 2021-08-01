@@ -6,12 +6,12 @@ import firebase from "firebase/app"
 
 
 var firebaseConfig = {
-  apiKey: "AIzaSyB7H5nwH3H3Z7FJdjKaEp7wnOzdHzyG3Xs",
-  authDomain: "invoice-app-99fc9.firebaseapp.com",
-  projectId: "invoice-app-99fc9",
-  storageBucket: "invoice-app-99fc9.appspot.com",
-  messagingSenderId: "851247429391",
-  appId: "1:851247429391:web:c89e0f77c88f0c3950307a"
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID
 };
 
 firebase.initializeApp(firebaseConfig);
