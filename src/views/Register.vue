@@ -43,7 +43,7 @@ export default {
           email: this.email,
           username: this.username,
         });
-        await this.$router.push({ name: "Login" });
+        await this.$router.push({ name: "Home" });
       } catch (error) {
         console.log(error);
       }
