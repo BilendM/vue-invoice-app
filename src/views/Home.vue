@@ -54,7 +54,7 @@
 import Invoice from "@/components/Invoice";
 
 export default {
-  name: "Home",
+  name: "home",
   components: { Invoice },
   data() {
     return {
