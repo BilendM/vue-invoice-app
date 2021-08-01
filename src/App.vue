@@ -1,57 +1,59 @@
 <template>
-<div v-if="invoicesLoaded">
-  <div v-if="!mobile" class="app flex flex-column">
-    <Navigation />
-    <div class="app-content flex flex-column">
-      <Modal v-if="modalActive"/>
-      <transition name="invoice">
-        <InvoiceModal v-if="invoiceModal" />
-      </transition>
-      <router-view />
+  <div>
+    <div v-if="!mobile" class="app flex flex-column">
+      <Navigation />
+      <div class="app-content flex flex-column">
+        <Modal v-if="modalActive" />
+        <transition name="invoice">
+          <InvoiceModal v-if="invoiceModal" />
+        </transition>
+        <router-view />
+      </div>
+    </div>
+    <div v-else class="mobile-message flex flex-column">
+      <h2>Sorry, this app is not supported on mobile devices</h2>
+      <p>To use this app, use a computer or tablet</p>
     </div>
   </div>
-  <div v-else class="mobile-message flex flex-column">
-    <h2>Sorry, this app is not supported on mobile devices</h2>
-    <p>To use this app, use a computer or tablet</p>
-  </div>
-</div>
 </template>
 
 <script>
-
-import Navigation from './components/Navigation.vue'
-import InvoiceModal from './components/InvoiceModal.vue'
-import Modal from './components/Modal.vue'
-import firebase from "firebase/app"
+import Navigation from "./components/Navigation.vue";
+import InvoiceModal from "./components/InvoiceModal.vue";
+import Modal from "./components/Modal.vue";
+import firebase from "firebase/app";
 import "firebase/auth";
 export default {
   data() {
     return {
       mobile: false,
-    }
+    };
   },
   components: {
     Navigation,
     InvoiceModal,
-    Modal
+    Modal,
   },
   beforeMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
-        this.$router.replace({name: 'Login'})
-      } else if (this.$route.path == "/login" || this.$route.path == "/register"){
-        this.$router.replace({name: 'Home'})
+        this.$router.replace({ name: "Login" });
+      } else if (
+        this.$route.path == "/login" ||
+        this.$route.path == "/register"
+      ) {
+        this.$router.replace({ name: "Home" });
       }
     });
   },
   created() {
     this.checkScreen();
-    window.addEventListener('resize', this.checkScreen);
+    window.addEventListener("resize", this.checkScreen);
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
         //
       } else {
-        this.$store.dispatch('getInvoices', user.uid);
+        this.$store.dispatch("getInvoices", user.uid);
       }
     });
   },
@@ -61,10 +63,10 @@ export default {
       if (windowWidth <= 750) {
         this.mobile = true;
         return;
-      }else {
+      } else {
         this.mobile = false;
       }
-    }
+    },
   },
   computed: {
     invoiceModal() {
@@ -73,11 +75,8 @@ export default {
     modalActive() {
       return this.$store.state.modalActive;
     },
-    invoicesLoaded() {
-      return this.$store.state.invoicesLoaded;
-    }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">
@@ -93,8 +92,8 @@ export default {
 .app {
   background-color: #141625;
   min-height: 100vh;
-  @media(min-width: 900px) {
-    flex-direction: row!important;
+  @media (min-width: 900px) {
+    flex-direction: row !important;
   }
   .app-content {
     padding: 0 20px;

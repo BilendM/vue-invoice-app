@@ -1,14 +1,18 @@
 <template>
-  <div class="home container">
+  <div v-if="invoicesLoaded" class="home container">
     <div class="header flex">
       <div class="left flex flex-column">
         <h1>Invoices</h1>
-        <span>There are {{invoices.length}} total invoices</span>
+        <span>There are {{ invoices.length }} total invoices</span>
       </div>
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
-          <span>Filter by status<span v-if="filteredInvoice">: {{ filteredInvoice }}</span></span>
-          <img src="@/assets/icon-arrow-down.svg" alt="">
+          <span
+            >Filter by status<span v-if="filteredInvoice"
+              >: {{ filteredInvoice }}</span
+            ></span
+          >
+          <img src="@/assets/icon-arrow-down.svg" alt="" />
           <ul v-show="filterMenu" class="filter-menu">
             <li @click="filteredInvoices">Draft</li>
             <li @click="filteredInvoices">Pending</li>
@@ -18,22 +22,28 @@
         </div>
         <div @click="newInvoice" class="button flex">
           <div class="inner-button flex">
-            <img src="@/assets/icon-plus.svg" alt="">
+            <img src="@/assets/icon-plus.svg" alt="" />
           </div>
           <span>New Invoice</span>
         </div>
       </div>
     </div>
     <div v-if="invoices.length > 0">
-      <div v-if="filteredData.length <=0">
-        <h4 class="no-filter">No Invoices with status of {{ filteredInvoice }}</h4>
+      <div v-if="filteredData.length <= 0">
+        <h4 class="no-filter">
+          No Invoices with status of {{ filteredInvoice }}
+        </h4>
       </div>
       <div v-else>
-        <Invoice v-for="(invoice, index) in filteredData" :key="index" :invoice="invoice"/>
+        <Invoice
+          v-for="(invoice, index) in filteredData"
+          :key="index"
+          :invoice="invoice"
+        />
       </div>
     </div>
     <div v-else class="empty flex flex-column">
-      <img src="@/assets/illustration-empty.svg" alt="">
+      <img src="@/assets/illustration-empty.svg" alt="" />
       <h3>Nothing here :(</h3>
       <p>Creat a new invoice by clicking the New Invoice button</p>
     </div>
@@ -41,38 +51,41 @@
 </template>
 
 <script>
-import Invoice from '@/components/Invoice'
+import Invoice from "@/components/Invoice";
 
 export default {
   name: "Home",
-  components: {Invoice},
+  components: { Invoice },
   data() {
     return {
       filterMenu: null,
-      filteredInvoice: null
-    }
+      filteredInvoice: null,
+    };
   },
   methods: {
     newInvoice() {
-      this.$store.commit('toggleInvoice');
+      this.$store.commit("toggleInvoice");
     },
     toggleFilterMenu() {
-      this.filterMenu = !this.filterMenu
+      this.filterMenu = !this.filterMenu;
     },
     filteredInvoices(e) {
-      if (e.target.innerText === 'Clear Filter') {
+      if (e.target.innerText === "Clear Filter") {
         this.filteredInvoice = null;
         return;
       }
       this.filteredInvoice = e.target.innerText;
-    }
+    },
   },
   computed: {
     invoices() {
       return this.$store.state.invoiceData;
     },
+    invoicesLoaded() {
+      return this.$store.state.invoicesLoaded;
+    },
     filteredData() {
-      return this.invoices.filter(invoice => {
+      return this.invoices.filter((invoice) => {
         if (this.filteredInvoice === "Draft") {
           return invoice.invoiceDraft === true;
         }
@@ -84,8 +97,8 @@ export default {
         }
         return invoice;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -123,7 +136,8 @@ export default {
           top: 25px;
           list-style: none;
           background-color: #1e2139;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
           li {
             cursor: pointer;
             font-size: 12px;

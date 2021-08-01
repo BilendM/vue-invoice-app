@@ -1,27 +1,46 @@
 <template>
-  <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
+  <div
+    @click="checkClick"
+    ref="invoiceWrap"
+    class="invoice-wrap flex flex-column"
+  >
     <form @submit.prevent="submitForm" class="invoice-content">
-      <Loading v-show="loading == true"/>
+      <Loading v-show="loading == true" />
       <h1 v-if="!editInvoice">New Invoice</h1>
       <h1 v-else>Edit Invoice</h1>
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
         <div class="input flex flex-column">
           <label for="billerStreetAddress">Street Address</label>
-          <input required type="text" id="billerStreetAddress" v-model="billerStreetAddress"/>
+          <input
+            required
+            type="text"
+            id="billerStreetAddress"
+            v-model="billerStreetAddress"
+          />
         </div>
         <div class="location-details flex">
           <div class="input flex flex-column">
             <label for="billerCity">City</label>
-            <input required type="text" id="billerCity" v-model="billerCity"/>
+            <input required type="text" id="billerCity" v-model="billerCity" />
           </div>
           <div class="input flex flex-column">
             <label for="billerZipCode">Zip Code</label>
-            <input required type="text" id="billerZipCode" v-model="billerZipCode"/>
+            <input
+              required
+              type="text"
+              id="billerZipCode"
+              v-model="billerZipCode"
+            />
           </div>
           <div class="input flex flex-column">
             <label for="billerCountry">Country</label>
-            <input required type="text" id="billerCountry" v-model="billerCountry"/>
+            <input
+              required
+              type="text"
+              id="billerCountry"
+              v-model="billerCountry"
+            />
           </div>
         </div>
       </div>
@@ -29,28 +48,43 @@
         <h4>Bill To</h4>
         <div class="input flex flex-column">
           <label for="clientName">Client Name</label>
-          <input required type="text" id="clientName" v-model="clientName"/>
+          <input required type="text" id="clientName" v-model="clientName" />
         </div>
         <div class="input flex flex-column">
           <label for="clientEmail">Client Email</label>
-          <input required type="text" id="clientEmail" v-model="clientEmail"/>
+          <input required type="text" id="clientEmail" v-model="clientEmail" />
         </div>
         <div class="input flex flex-column">
           <label for="clientStreetAddress">Client Street Address</label>
-          <input required type="text" id="clientStreetAddress" v-model="clientStreetAddress"/>
+          <input
+            required
+            type="text"
+            id="clientStreetAddress"
+            v-model="clientStreetAddress"
+          />
         </div>
         <div class="location-details flex">
           <div class="input flex flex-column">
             <label for="clientCity">Client City</label>
-            <input required type="text" id="clientCity" v-model="clientCity"/>
+            <input required type="text" id="clientCity" v-model="clientCity" />
           </div>
           <div class="input flex flex-column">
             <label for="clientZipCode">Client Zip Code</label>
-            <input required type="text" id="clientZipCode" v-model="clientZipCode"/>
+            <input
+              required
+              type="text"
+              id="clientZipCode"
+              v-model="clientZipCode"
+            />
           </div>
           <div class="input flex flex-column">
             <label for="clientCountry">Client Country</label>
-            <input required type="text" id="clientCountry" v-model="clientCountry"/>
+            <input
+              required
+              type="text"
+              id="clientCountry"
+              v-model="clientCountry"
+            />
           </div>
         </div>
       </div>
@@ -58,20 +92,40 @@
         <div class="payment flex">
           <div class="input flex flex-column">
             <label for="invoiceDate">Invoice Date</label>
-            <input disabled type="text" id="invoiceDate" v-model="invoiceDate"/>
+            <input
+              disabled
+              type="text"
+              id="invoiceDate"
+              v-model="invoiceDate"
+            />
           </div>
           <div class="input flex flex-column">
             <label for="paymentDueDate">Payment Due</label>
-            <input required type="text" id="paymentDueDate" v-model="paymentDueDate"/>
+            <input
+              required
+              type="text"
+              id="paymentDueDate"
+              v-model="paymentDueDate"
+            />
           </div>
         </div>
         <div class="input flex flex-column">
           <label for="paymentTerms">Payment Terms (In Days)</label>
-          <input required type="number" id="paymentTerms" v-model="paymentTerms"/>
+          <input
+            required
+            type="number"
+            id="paymentTerms"
+            v-model="paymentTerms"
+          />
         </div>
         <div class="input flex flex-column">
           <label for="productDescription">Product Description</label>
-          <input required type="text" id="productDescription" v-model="productDescription"/>
+          <input
+            required
+            type="text"
+            id="productDescription"
+            v-model="productDescription"
+          />
         </div>
         <div class="work-items">
           <h3>Item List</h3>
@@ -82,47 +136,76 @@
               <th class="price">Price</th>
               <th class="total">Total</th>
             </tr>
-            <tr class="table-items flex" v-for="(item, index) in invoiceItemList" :key="index">
-              <td class="item-name"><input type="text" v-model="item.itemName"></td>
-              <td class="qty"><input type="text" v-model="item.qty"></td>
-              <td class="price"><input type="text" v-model="item.price"></td>
-              <td class="total flex">${{ item.total = item.qty * item.price }}</td>
-              <img @click="deleteInvoiceItem(item.id)" src="@/assets/icon-delete.svg" alt=""/>
+            <tr
+              class="table-items flex"
+              v-for="(item, index) in invoiceItemList"
+              :key="index"
+            >
+              <td class="item-name">
+                <input type="text" v-model="item.itemName" />
+              </td>
+              <td class="qty"><input type="text" v-model="item.qty" /></td>
+              <td class="price"><input type="text" v-model="item.price" /></td>
+              <td class="total flex">
+                ${{ (item.total = item.qty * item.price) }}
+              </td>
+              <img
+                @click="deleteInvoiceItem(item.id)"
+                src="@/assets/icon-delete.svg"
+                alt=""
+              />
             </tr>
           </table>
           <div @click="addNewInvoiceItem" class="flex button">
-            <img src="@/assets/icon-plus.svg" alt=""/>
+            <img src="@/assets/icon-plus.svg" alt="" />
             Add New Item
           </div>
         </div>
       </div>
       <div class="save flex">
         <div class="left">
-          <button type="button" @click="closeInvoice" class="red">Cancel</button>
+          <button type="button" @click="closeInvoice" class="red">
+            Cancel
+          </button>
         </div>
         <div class="right flex">
-          <button v-if="!editInvoice" type="submit" @click="saveDraft" class="dark-purple">Save Draft</button>
-          <button v-if="!editInvoice" type="submit" @click="publishInvoice" class="purple">Create Invoice</button>
-          <button v-if="editInvoice" type="submit" class="purple">Update Invoice</button>
+          <button
+            v-if="!editInvoice"
+            type="submit"
+            @click="saveDraft"
+            class="dark-purple"
+          >
+            Save Draft
+          </button>
+          <button
+            v-if="!editInvoice"
+            type="submit"
+            @click="publishInvoice"
+            class="purple"
+          >
+            Create Invoice
+          </button>
+          <button v-if="editInvoice" type="submit" class="purple">
+            Update Invoice
+          </button>
         </div>
       </div>
-      {{createdBy}}
     </form>
   </div>
 </template>
 
 <script>
-import firebase from "firebase/app"
+import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import Loading from '@/components/Loading';
-import {uid} from 'uid';
+import Loading from "@/components/Loading";
+import { uid } from "uid";
 export default {
-  name: 'invoiceModal',
+  name: "invoiceModal",
   data() {
     return {
       loading: false,
-      dateOptions: {year: "numeric", month: "short", day: "numeric" },
+      dateOptions: { year: "numeric", month: "short", day: "numeric" },
       docId: null,
       billerStreetAddress: null,
       billerCity: null,
@@ -144,16 +227,19 @@ export default {
       invoiceDraft: null,
       invoiceItemList: [],
       invoiceTotal: 0,
-      createdBy: firebase.auth().currentUser.uid
-    }
+      createdBy: firebase.auth().currentUser.uid,
+    };
   },
   components: {
-    Loading
+    Loading,
   },
   created() {
     if (!this.editInvoice) {
       this.invoiceDateUnix = Date.now();
-      this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions);
+      this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString(
+        "en-us",
+        this.dateOptions
+      );
     }
     if (this.editInvoice) {
       const editingInvoice = this.currentInvoice[0];
@@ -178,20 +264,19 @@ export default {
       this.invoiceDraft = editingInvoice.invoiceDraft;
       this.invoiceItemList = editingInvoice.invoiceItemList;
       this.invoiceTotal = editingInvoice.invoiceTotal;
-      this.createdBy = firebase.auth().currentUser.uid
-
+      this.createdBy = firebase.auth().currentUser.uid;
     }
   },
   methods: {
     checkClick(e) {
       if (e.target === this.$refs.invoiceWrap) {
-        this.$store.commit('toggleModal');
+        this.$store.commit("toggleModal");
       }
     },
     closeInvoice() {
-      this.$store.commit('toggleInvoice');
+      this.$store.commit("toggleInvoice");
       if (this.editInvoice) {
-          this.$store.commit('editInvoice');
+        this.$store.commit("editInvoice");
       }
     },
     addNewInvoiceItem() {
@@ -200,15 +285,17 @@ export default {
         itemName: "",
         qty: "",
         price: 0,
-        total: 0
-      })
+        total: 0,
+      });
     },
     deleteInvoiceItem(id) {
-      this.invoiceItemList = this.invoiceItemList.filter(item => item.id !== id)
+      this.invoiceItemList = this.invoiceItemList.filter(
+        (item) => item.id !== id
+      );
     },
     calInvoiceTotal() {
       this.invoiceTotal = 0;
-      this.invoiceItemList.forEach(item => {
+      this.invoiceItemList.forEach((item) => {
         this.invoiceTotal += item.total;
       });
     },
@@ -225,7 +312,7 @@ export default {
       }
       this.loading = true;
       this.calInvoiceTotal();
-      const databseRef = firebase.firestore().collection('invoices').doc();
+      const databseRef = firebase.firestore().collection("invoices").doc();
       await databseRef.set({
         invoiceId: uid(6),
         billerStreetAddress: this.billerStreetAddress,
@@ -252,8 +339,8 @@ export default {
         invoicePaid: null,
       });
       this.loading = false;
-      this.$store.commit('toggleInvoice');
-      this.$store.dispatch('getInvoices');
+      this.$store.commit("toggleInvoice");
+      this.$store.dispatch("getInvoices", firebase.auth().currentUser.uid);
     },
     async updateInvoice() {
       if (this.invoiceItemList.length <= 0) {
@@ -262,7 +349,10 @@ export default {
       }
       this.loading = true;
       this.calInvoiceTotal();
-      const databseRef = firebase.firestore().collection('invoices').doc(this.docId);
+      const databseRef = firebase
+        .firestore()
+        .collection("invoices")
+        .doc(this.docId);
       await databseRef.update({
         billerStreetAddress: this.billerStreetAddress,
         billerCity: this.billerCity,
@@ -280,19 +370,19 @@ export default {
         productDescription: this.productDescription,
         invoiceItemList: this.invoiceItemList,
         invoiceTotal: this.invoiceTotal,
-        createdBy: firebase.auth().currentUser.uid
+        createdBy: firebase.auth().currentUser.uid,
       });
       this.loading = false;
       const data = {
         docId: this.docId,
-        routeId: this.$route.params.invoiceId
-      }
-      this.$store.dispatch('updateInvoice', data);
+        routeId: this.$route.params.invoiceId,
+      };
+      this.$store.dispatch("updateInvoice", data);
     },
     submitForm() {
       if (this.editInvoice) {
         this.updateInvoice();
-        return
+        return;
       } else {
         this.uploadInvoice();
       }
@@ -304,16 +394,20 @@ export default {
     },
     currentInvoice() {
       return this.$store.state.currentInvoice;
-    }
+    },
   },
   watch: {
     paymentTerms() {
       const futureDate = new Date();
-      this.paymentDueDateUnix = futureDate.setDate(futureDate.getDate() + parseInt(this.paymentTerms));
-      this.paymentDueDate = new Date(this.paymentDueDateUnix).toLocaleDateString('en-us', this.dateOptions);
-    }
-  }
-}
+      this.paymentDueDateUnix = futureDate.setDate(
+        futureDate.getDate() + parseInt(this.paymentTerms)
+      );
+      this.paymentDueDate = new Date(
+        this.paymentDueDateUnix
+      ).toLocaleDateString("en-us", this.dateOptions);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -328,7 +422,7 @@ export default {
   &::-webkit-scrollbar {
     display: none;
   }
-  @media(min-width: 900px) {
+  @media (min-width: 900px) {
     left: 90px;
   }
 
@@ -339,7 +433,8 @@ export default {
     width: 100%;
     background-color: #141625;
     color: #fff;
-    box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
     h1 {
       margin-block: 48px;
@@ -374,7 +469,7 @@ export default {
       .payment {
         gap: 24px;
         div {
-          flex: 1
+          flex: 1;
         }
         #paymentTerms {
           padding-right: 20px;
@@ -443,16 +538,16 @@ export default {
       }
     }
     .save {
-        margin-top: 60px;
+      margin-top: 60px;
 
-        div {
-          flex: 1;
-        }
-
-        .right {
-          justify-content: flex-end;
-        }
+      div {
+        flex: 1;
       }
+
+      .right {
+        justify-content: flex-end;
+      }
+    }
   }
 
   .input {
