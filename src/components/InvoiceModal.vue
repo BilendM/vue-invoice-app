@@ -106,12 +106,15 @@
           <button v-if="editInvoice" type="submit" class="purple">Update Invoice</button>
         </div>
       </div>
+      {{createdBy}}
     </form>
   </div>
 </template>
 
 <script>
-import firebase from '../firebase/firebaseinit';
+import firebase from "firebase/app"
+import "firebase/firestore";
+import "firebase/auth";
 import Loading from '@/components/Loading';
 import {uid} from 'uid';
 export default {
@@ -141,6 +144,7 @@ export default {
       invoiceDraft: null,
       invoiceItemList: [],
       invoiceTotal: 0,
+      createdBy: firebase.auth().currentUser.uid
     }
   },
   components: {
@@ -174,6 +178,8 @@ export default {
       this.invoiceDraft = editingInvoice.invoiceDraft;
       this.invoiceItemList = editingInvoice.invoiceItemList;
       this.invoiceTotal = editingInvoice.invoiceTotal;
+      this.createdBy = firebase.auth().currentUser.uid
+
     }
   },
   methods: {
@@ -242,6 +248,7 @@ export default {
         invoiceTotal: this.invoiceTotal,
         invoicePending: this.invoicePending,
         invoiceDraft: this.invoiceDraft,
+        createdBy: firebase.auth().currentUser.uid,
         invoicePaid: null,
       });
       this.loading = false;
@@ -255,7 +262,7 @@ export default {
       }
       this.loading = true;
       this.calInvoiceTotal();
-      const databseRef = firebase.firestroe().collection('invoices').doc(this.docId);
+      const databseRef = firebase.firestore().collection('invoices').doc(this.docId);
       await databseRef.update({
         billerStreetAddress: this.billerStreetAddress,
         billerCity: this.billerCity,
@@ -273,6 +280,7 @@ export default {
         productDescription: this.productDescription,
         invoiceItemList: this.invoiceItemList,
         invoiceTotal: this.invoiceTotal,
+        createdBy: firebase.auth().currentUser.uid
       });
       this.loading = false;
       const data = {

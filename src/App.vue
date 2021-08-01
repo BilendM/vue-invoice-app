@@ -18,13 +18,16 @@
 </template>
 
 <script>
+
 import Navigation from './components/Navigation.vue'
 import InvoiceModal from './components/InvoiceModal.vue'
 import Modal from './components/Modal.vue'
+import firebase from "firebase/app"
+import "firebase/auth";
 export default {
   data() {
     return {
-      mobile: null
+      mobile: false,
     }
   },
   components: {
@@ -32,15 +35,27 @@ export default {
     InvoiceModal,
     Modal
   },
+  beforeMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        this.$router.replace({name: 'Login'})
+      } else if (this.$route.path == "/login" || this.$route.path == "/register"){
+        this.$router.replace({name: 'Home'})
+      }
+    });
+  },
   created() {
     this.checkScreen();
     window.addEventListener('resize', this.checkScreen);
-    this.getInvoices();
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        //
+      } else {
+        this.$store.dispatch('getInvoices', user.uid);
+      }
+    });
   },
   methods: {
-    getInvoices() {
-      this.$store.dispatch('getInvoices');
-    },
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
