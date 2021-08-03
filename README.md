@@ -1,4 +1,5 @@
-# invoice
+# Vue/Firebase Invoice App
+Built an invoice app using Vue and Firebase by following [John Komarnicki's](https://github.com/johnkomarnicki) [Tutorial on Youtube](https://www.youtube.com/watch?v=vsJtN54aA7w&t=9s). Hosted the app on Firebase and added Firebase authentication for a personal touch.
 
 ## Project setup
 ```
