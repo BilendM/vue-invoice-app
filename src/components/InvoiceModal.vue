@@ -5,6 +5,7 @@
     class="invoice-wrap flex flex-column"
   >
     <form @submit.prevent="submitForm" class="invoice-content">
+      <h1>{{ docId }}</h1>
       <Loading v-show="loading == true" />
       <h1 v-if="!editInvoice">New Invoice</h1>
       <h1 v-else>Edit Invoice</h1>
@@ -156,6 +157,7 @@
               />
             </tr>
           </table>
+
           <div @click="addNewInvoiceItem" class="flex button">
             <img src="@/assets/icon-plus.svg" alt="" />
             Add New Item
@@ -312,7 +314,10 @@ export default {
       }
       this.loading = true;
       this.calInvoiceTotal();
-      const databseRef = firebase.firestore().collection("invoices").doc();
+      const databseRef = firebase
+        .firestore()
+        .collection("invoices")
+        .doc();
       await databseRef.set({
         invoiceId: uid(6),
         billerStreetAddress: this.billerStreetAddress,
@@ -370,12 +375,12 @@ export default {
         productDescription: this.productDescription,
         invoiceItemList: this.invoiceItemList,
         invoiceTotal: this.invoiceTotal,
-        createdBy: firebase.auth().currentUser.uid,
       });
       this.loading = false;
       const data = {
         docId: this.docId,
         routeId: this.$route.params.invoiceId,
+        createdBy: firebase.auth().currentUser.uid,
       };
       this.$store.dispatch("updateInvoice", data);
     },
